@@ -2,6 +2,7 @@ package banco;
 
 public class ContaPoupanca extends Conta{
 
+	//construtor para clientes
 	public ContaPoupanca(Cliente cliente) {
 		super(cliente);
 	}
