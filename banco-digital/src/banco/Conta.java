@@ -31,14 +31,17 @@ public abstract class Conta implements IConta{
 	@Override
 	public void sacar(double valor) {
 		if(saldo < valor) {
-			throw new InputMismatchException("Saldo Insuficiente!");
+			throw new InputMismatchException("(você tentou sacar " + valor + "R$ - Saldo Insuficiente!)\n");
 		}
 		else if(valor < 1000) { 
 			saldo -= valor;
+			System.out.println("(Você sacou: " + valor + "R$)\n");
 		}
-		//operações para tarifa de 4,5% se saque for maior que 1000
+		//operações para tarifa de 4,5% do valor se saque for maior que 1000
 		else if(valor >= 1000) {
 			saldo -= 0.045 * valor;
+			System.out.println("(Você sacou: " + valor + 
+			"R$ - Tarifa por saque acima de mil reais: " + (0.045 * valor) + "R$)\n");	
 		}
 	}
 	
@@ -48,11 +51,14 @@ public abstract class Conta implements IConta{
 	public void depositar(double valor) {
 		if(valor < 1000) {
 			saldo += valor;
+			//System.out.println("(Você depositou: " + valor + "R$)\n");
 		}
-		//operações para tarifa de 4,5% se saque for maior que 1000
+		//operações para tarifa de 4,5% do valor se depósito for maior que 1000
 		else if(valor >= 1000) {
 			saldo += valor;
 			saldo -= (0.045 * valor);
+			System.out.println("(Você depositou: " + valor + 
+			"R$ - Tarifa por depósito acima de mil reais: " + (0.045 * valor) + "R$)\n");
 		}
 	}
 
@@ -60,16 +66,19 @@ public abstract class Conta implements IConta{
 	@Override
 	public void transferir(double valor, Conta contaDestino) {
 		if(saldo < valor) {
-			throw new InputMismatchException("Saldo Insuficiente!");
+			throw new InputMismatchException("(você tentou transferir " + valor + "R$ - Saldo Insuficiente!)\n");
 		}
-		else if(saldo < 1000) {
+		else if(valor < 1000) {
 			this.sacar(valor);
 			contaDestino.depositar(valor);
+			System.out.println("(Você transferiu: " + valor + "R$)\n");
 		}
-		
-		else if(saldo >= 1000) {
+		//operações para tarifa de 4,5% do valor se transferência for igual ou maior que 1000
+		else if(valor >= 1000) {
 			this.sacar(valor);
-			contaDestino.depositar(valor - (valor * 0.045));
+			contaDestino.depositar(valor);
+			System.out.println("(Você transferiu: " + valor + 
+			"R$ - Tarifa por transferência acima de mil reais: " + (0.045 * valor) + "R$)\n");
 		}
 	}
 
