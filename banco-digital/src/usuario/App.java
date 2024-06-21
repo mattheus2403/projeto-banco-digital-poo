@@ -3,6 +3,7 @@ package usuario;
 import banco.Cliente;
 import banco.Conta;
 import banco.ContaCorrente;
+import banco.ContaPoupanca;
 
 public class App {
 	
@@ -11,11 +12,13 @@ public class App {
 		matheus.setNome("Matheus");
 		
 		Conta corrente = new ContaCorrente(matheus);
-		corrente.depositar(50);
+		corrente.depositar(2094.24);
 		
-		Conta poupanca = new ContaCorrente(matheus);
 		
-		corrente.transferir(50, poupanca);
+		Conta poupanca = new ContaPoupanca(matheus);
+		//poupanca.depositar(50);
+		
+		corrente.transferir(1000, poupanca);
 		
 		corrente.imprimirExtrato();
 		poupanca.imprimirExtrato();

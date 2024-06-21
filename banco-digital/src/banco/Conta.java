@@ -1,5 +1,7 @@
 package banco;
 
+import java.util.InputMismatchException;
+
 public abstract class Conta implements IConta{
 
 	//atributos
@@ -20,24 +22,55 @@ public abstract class Conta implements IConta{
 		this.cliente = cliente;
 	}
 	
+//	private void sacarOperacao(double valor) {
+//		saldo -= valor;
+//	}
+	
 	//saca determinado valor da conta
 	//métodos
 	@Override
 	public void sacar(double valor) {
-		saldo -= valor;
+		if(saldo < valor) {
+			throw new InputMismatchException("Saldo Insuficiente!");
+		}
+		else if(valor < 1000) { 
+			saldo -= valor;
+		}
+		//operações para tarifa de 4,5% se saque for maior que 1000
+		else if(valor >= 1000) {
+			saldo -= 0.045 * valor;
+		}
 	}
+	
 
 	//deposita determinado valor da conta
 	@Override
 	public void depositar(double valor) {
-		saldo += valor;
+		if(valor < 1000) {
+			saldo += valor;
+		}
+		//operações para tarifa de 4,5% se saque for maior que 1000
+		else if(valor >= 1000) {
+			saldo += valor;
+			saldo -= (0.045 * valor);
+		}
 	}
 
 	//transfere valor de uma conta para outra
 	@Override
 	public void transferir(double valor, Conta contaDestino) {
-		this.sacar(valor);
-		contaDestino.depositar(valor);
+		if(saldo < valor) {
+			throw new InputMismatchException("Saldo Insuficiente!");
+		}
+		else if(saldo < 1000) {
+			this.sacar(valor);
+			contaDestino.depositar(valor);
+		}
+		
+		else if(saldo >= 1000) {
+			this.sacar(valor);
+			contaDestino.depositar(valor - (valor * 0.045));
+		}
 	}
 
 	//imprime informações comuns da conta
